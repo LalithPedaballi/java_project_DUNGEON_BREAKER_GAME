@@ -1,0 +1,21 @@
+# Compiled Java class files and build output
+out/
+bin/
+target/
+*.class
+
+# IDE and Project metadata
+.idea/
+*.iml
+.vscode/
+.settings/
+.classpath
+.project
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Freebuff / Local Workspace Scratch
+.freebuff/
+*.log
