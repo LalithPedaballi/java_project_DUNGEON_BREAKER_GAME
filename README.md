@@ -1,60 +1,106 @@
 # DUNGEON BREAKER
 
-A cinematic 2D dark-fantasy fighting and dungeon crawl game built from scratch in pure **Java 17** using **Swing** and **Java2D**. Featuring an expansive six-hero roster, real-time physics and combat simulation, atmospheric multi-stage dungeon encounters, and multi-phase boss battles against **The Rift Warden**.
+A cinematic 2D dark-fantasy fighting and dungeon crawl game built in pure **Java 17** with standard **Swing** and **Java2D**. Pick your champion from a six-hero roster, explore multi-stage rift chambers, and battle through void monsters to challenge **The Rift Warden** — an imposing multi-phase boss.
 
-Zero external frameworks, zero third-party libraries, and zero build tool bloat — implemented strictly using the standard Java 17 runtime.
+Zero external frameworks, zero third-party libraries, and zero build tool bloat — implemented strictly using the standard Java 17 library (`java.desktop`).
 
 ---
 
-## 🎮 Key Features
+## 🎓 College Viva & Architecture Overview
 
-- **Six Distinct Playable Champions**:
-  - **Aegis** (The Iron Vanguard): High armor, defensive shield guards, and devastating shield bashes.
-  - **Nyx** (The Shadow Assassin): Agile rogue with poisoned dual daggers and lethal low-health execution strikes.
-  - **Zephyra** (The Arcane Weaver): Ranged sorceress with piercing arcane novas and floating mystic shard barriers.
-  - **Kael** (The Spellsword Duelist): High-mobility duelist combining rapid thrusts with elemental flame trails.
-  - **Vexara** (The Soul Reaper): Dark scythe wielder siphoning enemy life essence with every reap.
-  - **Draven** (The Magma Berserker): Unstoppable powerhouse triggering magma eruptions and earthquake slams.
+This project is structured specifically to demonstrate core **Object-Oriented Programming (OOP)** and standard **Computer Science** principles taught in an introductory Java course.
 
-- **Real-Time Combat & Physics Engine**:
-  - Continuous movement, jump trajectories with simulated gravity, and directional dash evasion with invulnerability frames (i-frames).
-  - Axis-Aligned Bounding Box (AABB) hitboxes aligned with weapon sweeps and character facing direction.
-  - Attack windup, recovery frames, knockback impulses, hit-stop, and dynamic screen shakes.
+### Package Responsibilities & Layered Design
 
-- **Atmospheric Multi-Stage Dungeon Crawl**:
-  - **Entrance**: Atmospheric dungeon infiltration.
-  - **Encounter 1 (Void Patrol)**: Fight through approaching void thralls and skirmishers.
-  - **Encounter 2 (Shadow Guard)**: Confront coordinated melee squads and ranged rift casters.
-  - **Boss Gate & Entrance**: Unseal the ancient rift threshold.
-  - **The Rift Warden Boss Duel**: Multi-phase boss battle with telegraphed cleaves, homing void bolts, ground shockwaves, and phase cataclysms.
+```
+src/com/riftarena/
+├── main/          # Entry point & application bootstrapping (GameApp)
+├── game/          # Domain layer: Core OOP character models, stats, combat rules
+├── realtime/      # Simulation layer: 2D physics, collision detection (AABB), game loop
+├── ui/            # Presentation layer: Swing windows, panels, CardLayout, inputs
+└── ui/render/     # Graphics layer: Java2D sprite animation, visual VFX, particles
+```
 
-- **Pure Java2D Visual Presentation**:
-  - High-resolution 16:10 arena backdrop (ruined gothic architecture, purple dimensional rift, flaming torches).
-  - Multi-frame sprite animation cycles (idle, walk, jump, dash, 3-hit attack strings, hurt, defeat).
-  - Dynamic visual effects: hit sparks, particle bursts, ground contact shadows, and glowing energy auras.
+### Understanding `game` vs. `realtime` (Common Viva Question!)
+
+A professor may ask: *"Why are `game` and `realtime` separate packages?"*
+
+- **`com.riftarena.game` (The Rulebook & Character Models)**:
+  - Defines **what** a character is: base health, attack power, defense mitigation, and special skills.
+  - Implements the mathematical formulas: damage calculations, cooldown increments, and state transitions.
+  - Contains pure Java classes (`Hero`, `Warrior`, `Mage`, `Enemy`, `RiftWarden`) that do not depend on screen coordinates or pixels.
+- **`com.riftarena.realtime` (The Physical Arena Simulation)**:
+  - Defines **where** characters exist in 2D space: X and Y coordinates, horizontal velocity ($v_x$), gravity and vertical jump velocity ($v_y$).
+  - Implements the real-time 60 FPS update loop, Axis-Aligned Bounding Box (`Hitbox`) collision detection, and multi-room dungeon progression (`DungeonRun`).
+  - Wraps the character models from `game`: for example, `RealTimePlayer` holds a reference to a `Hero`.
+
+This separation of concerns follows the classic **Model-View-Controller (MVC)** architectural pattern.
+
+---
+
+## 📚 Java Syllabus Concepts Demonstrated
+
+| Syllabus Concept | Description | Project File Reference |
+| :--- | :--- | :--- |
+| **Interfaces** | Defines common contracts without implementation details. | [`Combatant.java`](src/com/riftarena/game/Combatant.java), [`CharacterRenderer.java`](src/com/riftarena/ui/render/CharacterRenderer.java) |
+| **Abstract Classes** | Provides shared code while enforcing subclass implementations. | [`Hero.java`](src/com/riftarena/game/Hero.java), [`RealTimeEntity.java`](src/com/riftarena/realtime/RealTimeEntity.java) |
+| **Inheritance (`extends`)** | Subclasses inherit properties and methods from parent classes. | [`Warrior.java`](src/com/riftarena/game/Warrior.java), [`RealTimePlayer.java`](src/com/riftarena/realtime/RealTimePlayer.java) |
+| **Polymorphism & Overriding** | Subclasses override methods to provide distinct behavior at runtime. | [`@Override executeSpecial()`](src/com/riftarena/game/Mage.java), [`@Override render()`](src/com/riftarena/ui/render/KaelRenderer.java) |
+| **Encapsulation** | Private member variables protected by getters, setters, and validation. | `Hero.java` (HP clamping and constructor argument checks) |
+| **Constructor Chaining** | Using `super(...)` and `this(...)` to delegate initialization. | [`Enemy.java`](src/com/riftarena/game/Enemy.java), [`Warrior.java`](src/com/riftarena/game/Warrior.java) |
+| **Enums** | Strongly typed named constants with methods and state. | [`Behaviour.java`](src/com/riftarena/game/Enemy.java), [`DungeonStage.java`](src/com/riftarena/realtime/DungeonStage.java), [`EntityState.java`](src/com/riftarena/realtime/EntityState.java) |
+| **Collections & Generics** | Managing dynamic lists of entities, particles, and hitboxes. | `List<Projectile>`, `ArrayList<EmberParticle>` in [`DungeonRun.java`](src/com/riftarena/realtime/DungeonRun.java) |
+| **Switch Expressions** | Modern Java pattern matching and concise decision making. | [`MainFrame.java`](src/com/riftarena/ui/MainFrame.java) (`createHero`) |
+| **AABB Collision Detection** | Fundamental 2D physics math using rectangle intersections. | [`Hitbox.java`](src/com/riftarena/realtime/Hitbox.java) (`intersects` method) |
+| **GUI & Event Handling** | Swing window management and key/mouse event listeners. | [`CombatPanel.java`](src/com/riftarena/ui/CombatPanel.java), [`MenuPanel.java`](src/com/riftarena/ui/MenuPanel.java) |
+| **Custom Graphics (Java2D)** | Custom drawing using `Graphics2D`, affine transforms, and paint cycles. | [`FigureRenderer.java`](src/com/riftarena/ui/render/FigureRenderer.java) |
+
+---
+
+## 🎨 The Role of Swing & Java2D
+
+- **Why Swing?**: Swing is the standard graphical user interface (GUI) toolkit built into the Java Development Kit. In this game, `MainFrame` uses a `CardLayout` to switch smoothly between the `MenuPanel`, `HeroSelectPanel`, `CombatPanel`, and `ResultPanel`.
+- **Why Java2D?**: Java2D provides two-dimensional graphics APIs (`Graphics2D`). The game overrides `paintComponent(Graphics g)` to perform double-buffered drawing of background environments, multi-frame character animations, health bars, and particle effects.
+
+---
+
+## 🎮 The Six Playable Champions
+
+1. **Aegis** (*The Iron Vanguard*): High HP, heavy plate armor, sunburst heater shield, and damage-mitigating Shield Slam.
+2. **Nyx** (*The Shadow Assassin*): Swift rogue wielding poisoned dual daggers with lethal execution strikes against low-health enemies.
+3. **Zephyra** (*The Arcane Weaver*): Ranged sorceress with floating mystic focus shards and high-damage Arcane Nova spells.
+4. **Kael** (*The Spellsword Duelist*): Agile blade master combining rapid rapier thrusts with high forward dash mobility.
+5. **Vexara** (*The Soul Reaper*): Dark scythe wielder whose Soul Reap ability siphons life from opponents back to herself.
+6. **Draven** (*The Magma Berserker*): Molten powerhouse with temporary invulnerability and ground-shaking Magma Eruptions.
 
 ---
 
 ## 🕹️ Controls & Keybindings
 
-All inputs are registered globally using Swing window-level input maps (`WHEN_IN_FOCUSED_WINDOW`) and responsive mouse handlers.
+All keybindings use Swing window-level input maps (`WHEN_IN_FOCUSED_WINDOW`) for responsive keyboard control:
 
-| Key / Input | Action | Description |
+| Control | Action | Function |
 | :--- | :--- | :--- |
-| **`A` / `D`** *(or Left/Right Arrows)* | **Move Left / Right** | Continuous horizontal movement clamped to arena boundaries. |
-| **`W` / `Space`** *(or Up Arrow)* | **Jump** | Vertical leap with gravity simulation. Avoid ground shockwaves! |
-| **`J`** *(or **Left Mouse Click**)* | **Primary Attack** | 3-hit weapon combo with active hitboxes and directional reach. |
-| **`K`** *(or **Right Mouse Click**)* | **Special Move** | Class-specific ultimate ability gated by cooldown / power meter. |
-| **`Shift`** | **Dash / Evade** | High-velocity evasive burst with invulnerability frames (i-frames). |
-| **`ESC`** | **Pause / Resume** | Freezes active combat simulation and physics without losing state. |
-| **`R`** | **Restart** | Reinitializes the encounter with full HP and reset positions. |
+| **`A` / `D`** *(or $\leftarrow$ / $\rightarrow$)* | **Move Left / Right** | Continuous horizontal motion clamped to arena walls. |
+| **`W` / `Space`** *(or $\uparrow$)* | **Jump** | Vertical jump with simulated gravity to leap over boss shockwaves. |
+| **`J`** *(or Left Click)* | **Attack** | Multi-hit weapon swing with active directional hitboxes. |
+| **`K`** *(or Right Click)* | **Special Move** | Unique champion skill with cooldown timer. |
+| **`Shift`** | **Dash / Evade** | Fast evasive dash with invulnerability frames (i-frames). |
+| **`ESC`** | **Pause / Resume** | Freezes game physics and animation updates. |
+| **`R`** | **Restart** | Resets the run with full health and fresh enemies. |
 
 ---
 
-## 💻 System Requirements
+## 💻 System Requirements & Java Verification
 
-- **Java Development Kit (JDK) 17 or higher** (`java -version` to verify)
-- Standard Java GUI libraries (`java.awt`, `javax.swing`) included with standard JDK distributions.
+This game requires **JDK 17 or higher**.
+
+To verify your Java installation:
+```bash
+java -version
+javac -version
+```
+If both print version `17` or higher, your environment is ready.
 
 ---
 
@@ -83,38 +129,12 @@ java -cp out com.riftarena.main.GameApp
 
 ---
 
-## 🧪 Running the Automated Test Suites
+## 🧪 Automated Test Suites
 
-The project includes **120 comprehensive automated unit, physics, and integration tests** across **8 test suites**:
+The project contains **120 automated tests across 8 test suites** verifying turn-based logic, real-time physics, AI patterns, UI state, and rendering:
 
 ```bash
-# Suite 1: Core Combat Engine & Turn-Based Rules (31 tests)
-java -cp out com.riftarena.game.CombatEngineTest
-
-# Suite 2: Six-Hero Roster & Enemy Asset Integrity (9 tests)
-java -cp out com.riftarena.game.SixHeroRosterAndEnemiesTest
-
-# Suite 3: Real-Time Combat & Physics Engine (17 tests)
-java -cp out com.riftarena.realtime.RealTimeCombatTest
-
-# Suite 4: Dungeon Progression & Stage Transitions (26 tests)
-java -cp out com.riftarena.realtime.DungeonProgressionTest
-
-# Suite 5: Swing UI Integration & Battle State Wiring (13 tests)
-java -cp out com.riftarena.ui.UIIntegrationTest
-
-# Suite 6: Visual Presentation & Java2D Renderers (9 tests)
-java -cp out com.riftarena.ui.VisualPresentationTest
-
-# Suite 7: Live Gameplay Verification & Controls Flow (10 tests)
-java -cp out com.riftarena.ui.LiveGameplayVerificationTest
-
-# Suite 8: Main Menu Navigation & Layout Bounds (5 tests)
-java -cp out com.riftarena.ui.MenuPanelTest
-```
-
-### Run All 8 Suites in One Command
-```bash
+# Run all 8 suites in a single command:
 java -cp out com.riftarena.game.CombatEngineTest && \
 java -cp out com.riftarena.game.SixHeroRosterAndEnemiesTest && \
 java -cp out com.riftarena.realtime.RealTimeCombatTest && \
@@ -125,58 +145,36 @@ java -cp out com.riftarena.ui.LiveGameplayVerificationTest && \
 java -cp out com.riftarena.ui.MenuPanelTest
 ```
 
+### Test Suite Summary
+
+1. **`CombatEngineTest` (31 tests)**: Validates health clamping, turn order, defense mitigation (50%), and phase threshold triggers.
+2. **`SixHeroRosterAndEnemiesTest` (9 tests)**: Verifies 6 hero classes, unique renderers, and presence of all 12 animation frames on disk.
+3. **`RealTimeCombatTest` (17 tests)**: Tests velocity, gravity trajectory, jump landing, AABB hitbox collisions, and i-frames.
+4. **`DungeonProgressionTest` (26 tests)**: Validates stage transitions (Entrance $\rightarrow$ Encounters 1 & 2 $\rightarrow$ Boss Gate $\rightarrow$ Victory).
+5. **`UIIntegrationTest` (13 tests)**: Verifies Swing panel routing, HUD updates, button listeners, and result stats.
+6. **`VisualPresentationTest` (9 tests)**: Ensures headless Java2D offscreen rendering executes with zero crashes.
+7. **`LiveGameplayVerificationTest` (10 tests)**: Validates player input handling, dash speeds, attack combos, and end-to-end flow.
+8. **`MenuPanelTest` (5 tests)**: Verifies responsive menu geometry, button bounding boxes, and keyboard arrow navigation.
+
 ---
 
-## 📂 Project Architecture
+## 📁 Clean Project Directory Structure
 
 ```
 java project/
-├── assets/                     # Runtime graphical game assets
-│   ├── arena/                  # Clean high-definition arena backgrounds
-│   ├── enemies/                # Cutout artwork for monsters and bosses
-│   ├── heroes/                 # 12-frame animation sets for all 6 champions
-│   └── menu/                   # High-definition main menu background
-├── screenshots/                # 18 official showcase screenshots
-├── src/                        # Game source code
+├── assets/                     # Required runtime visual assets
+│   ├── arena/                  # Arena backgrounds (dungeon_arena_background.png)
+│   ├── enemies/                # 6 transparent monster and boss cutouts
+│   ├── heroes/                 # 6 champions with 12-frame animation sets
+│   └── menu/                   # 2048x1150 main menu background
+├── src/                        # Clean Java 17 source code (50 classes)
 │   └── com/riftarena/
-│       ├── main/               # Game entry point (GameApp)
-│       ├── game/               # Core data models, stats, combatants
-│       ├── realtime/           # Physics, collision hitboxes, AI loops, dungeon manager
-│       ├── ui/                 # Swing panels, layout managers, theme configuration
-│       └── ui/render/          # Java2D custom renderers, sprite loaders, VFX
-├── test/                       # 8 automated test suites and screenshot capture utility
-├── README.md                   # Project documentation and student guide
-└── .gitignore                  # Git ignore rules for build and IDE files
+│       ├── main/               # GameApp.java
+│       ├── game/               # Models (Hero, Enemy, CombatEngine, Combatant)
+│       ├── realtime/           # Physics (RealTimePlayer, RealTimeEnemy, Hitbox)
+│       ├── ui/                 # Swing UI (MainFrame, MenuPanel, CombatPanel)
+│       └── ui/render/          # Java2D renderers, sprite loader, VFX
+├── test/                       # 8 automated regression test suites
+├── README.md                   # Project documentation and student viva guide
+└── .gitignore                  # Git configuration ignoring build & IDE files
 ```
-
-### Package Responsibilities
-
-1. **`com.riftarena.main`**:
-   - `GameApp.java`: Initializes Swing look-and-feel on the Event Dispatch Thread (EDT) and boots `MainFrame`.
-
-2. **`com.riftarena.game`**:
-   - `Combatant.java`, `Hero.java`, `Enemy.java`: Base character models tracking health, spirit, and combat stats.
-   - `Warrior.java`, `Assassin.java`, `Mage.java`, `Kael.java`, `Vexara.java`, `Draven.java`: Champion concrete classes with unique stat distributions and special abilities.
-   - `RiftWarden.java`: Boss model with multi-phase transition logic.
-   - `CombatEngine.java`: Authoritative turn-based and mathematical combat rules.
-
-3. **`com.riftarena.realtime`**:
-   - `RealTimeCombatEngine.java`: Fixed-timestep game loop managing physics, entity velocities, gravity, and attacks.
-   - `RealTimePlayer.java` & `RealTimeEnemy.java`: Real-time entities handling inputs, state machines (`IDLE`, `WALKING`, `JUMPING`, `ATTACKING`, `HURT`, `DEFEAT`), and AI behavior.
-   - `Hitbox.java`: Precision Axis-Aligned Bounding Box (AABB) intersection detection.
-   - `DungeonRun.java` & `DungeonStage.java`: Oversees stage progression from Dungeon Entrance to Boss Victory.
-
-4. **`com.riftarena.ui`**:
-   - `MainFrame.java`: Top-level window managing card-layout transitions between screens.
-   - `MenuPanel.java`: Cinematic title screen with interactive options (`ENTER DUNGEON`, `BOSS CHALLENGE`, etc.).
-   - `HeroSelectPanel.java`: Fighting-game character selection screen with animated champion previews and stat charts.
-   - `CombatPanel.java`: Real-time combat viewport, top HUD (HP/SP bars, portrait frames), and bottom controls bar.
-   - `ResultPanel.java`: Victory/defeat summary screen displaying clear times, kills, and Hunter Ranks.
-   - `Theme.java`: Centralized color palette, glowing fonts, and gold borders.
-
-5. **`com.riftarena.ui.render`**:
-   - `HeroSpriteLoader.java`: Thread-safe caching sprite loader for character frame sequences and cutouts.
-   - `CharacterRendererFactory.java`: Factory mapping character types to dedicated custom Java2D renderers.
-   - `WarriorRenderer.java`, `MageRenderer.java`, `AssassinRenderer.java`, `KaelRenderer.java`, `VexaraRenderer.java`, `DravenRenderer.java`: Champion-specific renderers with directional orientation and weapon glow.
-   - `RiftWardenRenderer.java`: Boss renderer featuring multi-phase cataclysm aura and ground slam shocks.
-   - `CombatEffectManager.java`: Particle simulation for hit sparks, projectile trails, and floating damage numbers.
