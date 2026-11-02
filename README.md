@@ -6,9 +6,7 @@ Zero external frameworks, zero third-party libraries, and zero build tool bloat 
 
 ---
 
-## 🎓 College Viva & Architecture Overview
 
-This project is structured specifically to demonstrate core **Object-Oriented Programming (OOP)** and standard **Computer Science** principles taught in an introductory Java course.
 
 ### Package Responsibilities & Layered Design
 
@@ -38,7 +36,7 @@ This separation of concerns follows the classic **Model-View-Controller (MVC)** 
 
 ---
 
-## 📚 Java Syllabus Concepts Demonstrated
+##  Java Syllabus Concepts Demonstrated
 
 | Syllabus Concept | Description | Project File Reference |
 | :--- | :--- | :--- |
@@ -57,14 +55,14 @@ This separation of concerns follows the classic **Model-View-Controller (MVC)** 
 
 ---
 
-## 🎨 The Role of Swing & Java2D
+##  The Role of Swing & Java2D
 
 - **Why Swing?**: Swing is the standard graphical user interface (GUI) toolkit built into the Java Development Kit. In this game, `MainFrame` uses a `CardLayout` to switch smoothly between the `MenuPanel`, `HeroSelectPanel`, `CombatPanel`, and `ResultPanel`.
 - **Why Java2D?**: Java2D provides two-dimensional graphics APIs (`Graphics2D`). The game overrides `paintComponent(Graphics g)` to perform double-buffered drawing of background environments, multi-frame character animations, health bars, and particle effects.
 
 ---
 
-## 🎮 The Six Playable Champions
+##  The Six Playable Champions
 
 1. **Aegis** (*The Iron Vanguard*): High HP, heavy plate armor, sunburst heater shield, and damage-mitigating Shield Slam.
 2. **Nyx** (*The Shadow Assassin*): Swift rogue wielding poisoned dual daggers with lethal execution strikes against low-health enemies.
@@ -75,7 +73,7 @@ This separation of concerns follows the classic **Model-View-Controller (MVC)** 
 
 ---
 
-## 🕹️ Controls & Keybindings
+##  Controls & Keybindings
 
 All keybindings use Swing window-level input maps (`WHEN_IN_FOCUSED_WINDOW`) for responsive keyboard control:
 
@@ -91,7 +89,7 @@ All keybindings use Swing window-level input maps (`WHEN_IN_FOCUSED_WINDOW`) for
 
 ---
 
-## 💻 System Requirements & Java Verification
+##  System Requirements & Java Verification
 
 This game requires **JDK 17 or higher**.
 
@@ -104,7 +102,7 @@ If both print version `17` or higher, your environment is ready.
 
 ---
 
-## 🚀 How to Compile and Run
+##  How to Compile and Run
 
 ### macOS & Linux
 ```bash
@@ -129,7 +127,7 @@ java -cp out com.riftarena.main.GameApp
 
 ---
 
-## 🧪 Automated Test Suites
+##  Automated Test Suites
 
 The project contains **120 automated tests across 8 test suites** verifying turn-based logic, real-time physics, AI patterns, UI state, and rendering:
 
@@ -158,7 +156,7 @@ java -cp out com.riftarena.ui.MenuPanelTest
 
 ---
 
-## 📁 Clean Project Directory Structure
+##  Clean Project Directory Structure
 
 ```
 java project/
